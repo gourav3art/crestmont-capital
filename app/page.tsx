@@ -107,7 +107,7 @@ export default function Home() {
       <section id="contact" className="bg-gray-900 py-20 px-8">
         <div className="max-w-4xl mx-auto text-center">
           <h3 className="text-3xl font-semibold mb-6">Contact</h3>
-          <p className="text-gray-300">Email: compliance@crestmontcapital.com</p>
+          <p className="text-gray-300">Email: stag42uk@gmail.com</p>
           <p className="text-gray-400 mt-2">Business Type: Proprietary Trading Firm</p>
           <p className="text-gray-400">Response Time: 24–48 business hours</p>
         </div>
