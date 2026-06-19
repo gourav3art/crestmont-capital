@@ -3,118 +3,127 @@
 import { useState, useEffect } from "react";
 
 // ============================================================================
-// SYSTEM IDENTIFIERS & CONFIGURATION ARRAYS
+// SYSTEM IDENTIFIERS, QUANTITATIVE CONSTANTS & METRIC MATRICES
 // ============================================================================
 
-type ActivePanel = "overview" | "topologies" | "attenuation" | "disclosures";
+type ActivePanel =
+  | "overview"
+  | "topologies"
+  | "attenuation"
+  | "governance"
+  | "compliance"
+  | "ledger";
 
 interface TelemetryRow {
   id: string;
-  timestamp: string;
-  vector: string;
-  systemState: string;
-  coefficient: number;
+  timeMark: string;
+  subsystem: string;
+  metricLabel: string;
+  precisionWeight: number;
 }
 
-const INITIAL_NODES = [
+const CAPITAL_CHANNELS = [
   {
-    region: "LONDON // GLOBAL CORE",
-    alphaWeight: 0.35,
-    liquidityIndex: 0.98,
-    state: "ACTIVE",
+    zone: "LONDON // GLOBAL ENTERPRISE CORE",
+    baseRatio: 0.35,
+    densityMetric: 0.985,
+    structuralCap: "0.04%",
   },
   {
-    region: "NEW YORK // HUB NODE",
-    alphaWeight: 0.3,
-    liquidityIndex: 0.96,
-    state: "ACTIVE",
+    zone: "NEW_YORK // PRIMARY LIQUIDITY NODE",
+    baseRatio: 0.3,
+    densityMetric: 0.962,
+    structuralCap: "0.05%",
   },
   {
-    region: "SINGAPORE // ACCELERATION NODE",
-    alphaWeight: 0.2,
-    liquidityIndex: 0.92,
-    state: "ACTIVE",
+    zone: "SINGAPORE // CROSS_BORDER VECTOR",
+    baseRatio: 0.2,
+    densityMetric: 0.914,
+    structuralCap: "0.08%",
   },
   {
-    region: "TOKYO // RESILIENCE VECTOR",
-    alphaWeight: 0.15,
-    liquidityIndex: 0.89,
-    state: "ACTIVE",
+    zone: "TOKYO // LIQUIDITY RESILIENCE MATRIX",
+    baseRatio: 0.15,
+    densityMetric: 0.891,
+    structuralCap: "0.12%",
   },
 ];
 
 export default function Home() {
   // --- Core State Machine ---
   const [currentPanel, setCurrentPanel] = useState<ActivePanel>("overview");
-  const [allocationWeight, setAllocationWeight] = useState<number>(78.4);
-  const [varianceBound, setVarianceBound] = useState<number>(0.12);
-  const [tailRiskTolerance, setTailRiskTolerance] = useState<number>(1.65);
+  const [allocationParameter, setAllocationParameter] = useState<number>(78.4);
+  const [varianceBoundary, setVarianceBoundary] = useState<number>(0.12);
+  const [tailRiskZScore, setTailRiskZScore] = useState<number>(1.65);
   const [telemetryLogs, setTelemetryLogs] = useState<TelemetryRow[]>([]);
-  const [activeSignal, setActiveSignal] = useState<number>(0);
-  const [simulatedAUM, setSimulatedAUM] = useState<number>(14280.45);
-  const [systemUptime, setSystemUptime] = useState<number>(99.9984);
-  const [isProcessingMatrix, setIsProcessingMatrix] = useState<boolean>(false);
+  const [signalSequence, setSignalSequence] = useState<number>(0);
+  const [aggregateMetricsAUM, setAggregateMetricsAUM] =
+    useState<number>(14280.45);
+  const [systemUptimeContinuum, setSystemUptimeContinuum] =
+    useState<number>(99.9984);
+  const [isSyncingTopology, setIsSyncingTopology] = useState<boolean>(false);
 
-  // --- Live Dynamic Telemetry Stream ---
+  // --- Continuous Telemetry Operational Stream ---
   useEffect(() => {
     const vectors = [
-      "LIQUIDITY_CORE // CITADEL_SECURITIES_INTEGRATION",
-      "RISK_MATRIX // STOCHASTIC_VARIANCE_FILTER",
-      "ALLOCATION_VECTOR // CROSS_BORDER_CAPITAL",
-      "CLEARING_NODE // MULTI_ASSET_SETTLEMENT",
-      "DATA_ENGINE // ECONOMETRIC_TELEMETERING",
-      "CONFIRMATION // ASYMMETRIC_EQUILIBRIUM",
+      "CORE_LIQUIDITY // CITADEL_SECURITIES_INTEGRATION // VERIFIED_NODE",
+      "RISK_ATTENUATION // STOCHASTIC_VARIANCE_INSULATION // PASSING",
+      "ALLOCATION_MATRIX // CROSS_BORDER_CAPITAL_CONTINUUM_ACTIVE",
+      "CLEARING_ENGINE // MULTI_ASSET_SETTLEMENT_ROUTING_SUCCESS",
+      "DATA_INFRASTRUCTURE // ECONOMETRIC_TELEMETERING_SYNC_COMPLETE",
+      "VALIDATION_NODE // ASYMMETRIC_EQUILIBRIUM_ENFORCED_HORIZON",
     ];
 
-    const generateInitialLogs = (): TelemetryRow[] => {
-      return Array.from({ length: 5 }).map((_, index) => {
-        const time = new Date(Date.now() - (5 - index) * 5000);
+    const generateInitialMatrixLogs = (): TelemetryRow[] => {
+      return Array.from({ length: 8 }).map((_, i) => {
+        const timestamp = new Date(Date.now() - (8 - i) * 3000);
         return {
           id: Math.random().toString(36).substr(2, 9),
-          timestamp: time.toISOString().slice(11, 19),
-          vector: vectors[index % vectors.length],
-          systemState: "NOMINAL // VERIFIED",
-          coefficient: parseFloat((Math.random() * 0.1 + 0.9).toFixed(4)),
+          timeMark: timestamp.toISOString().slice(11, 19),
+          subsystem: vectors[i % vectors.length],
+          metricLabel: "NOMINAL // CORE_ACTIVE",
+          precisionWeight: parseFloat((Math.random() * 0.08 + 0.92).toFixed(4)),
         };
       });
     };
 
-    setTelemetryLogs(generateInitialLogs());
+    setTelemetryLogs(generateInitialMatrixLogs());
 
-    const streamInterval = setInterval(() => {
+    const runtimeInterval = setInterval(() => {
       setTelemetryLogs((prev) => {
-        const timestamp = new Date().toISOString().slice(11, 19);
-        const nextRow: TelemetryRow = {
+        const timeMark = new Date().toISOString().slice(11, 19);
+        const nextLog: TelemetryRow = {
           id: Math.random().toString(36).substr(2, 9),
-          timestamp,
-          vector: vectors[Math.floor(Math.random() * vectors.length)],
-          systemState:
-            Math.random() > 0.15
-              ? "NOMINAL // VERIFIED"
-              : "RE-INDEXING // CONTINUUM",
-          coefficient: parseFloat((Math.random() * 0.1 + 0.9).toFixed(4)),
+          timeMark,
+          subsystem: vectors[Math.floor(Math.random() * vectors.length)],
+          metricLabel:
+            Math.random() > 0.12
+              ? "NOMINAL // CORE_ACTIVE"
+              : "RE_INDEXING // STABILITY_HOLD",
+          precisionWeight: parseFloat((Math.random() * 0.08 + 0.92).toFixed(4)),
         };
-        return [...prev.slice(1), nextRow];
+        return [...prev.slice(1), nextLog];
       });
 
-      // Update ambient macro variables smoothly
-      setSimulatedAUM(
-        (prev) => prev + parseFloat((Math.random() * 0.4 - 0.18).toFixed(2))
+      setAggregateMetricsAUM(
+        (prev) => prev + parseFloat((Math.random() * 0.42 - 0.18).toFixed(2))
       );
-      setSystemUptime((prev) =>
-        Math.min(100, Math.max(99.99, prev + (Math.random() * 0.0002 - 0.0001)))
+      setSystemUptimeContinuum((prev) =>
+        Math.min(
+          100,
+          Math.max(99.99, prev + (Math.random() * 0.0001 - 0.00005))
+        )
       );
-      setActiveSignal((s) => (s + 1) % 4);
-    }, 3500);
+      setSignalSequence((s) => (s + 1) % 4);
+    }, 2500);
 
-    return () => clearInterval(streamInterval);
+    return () => clearInterval(runtimeInterval);
   }, []);
 
-  // --- Matrix Recalculation Handler ---
-  const triggerMatrixRecalculation = () => {
-    setIsProcessingMatrix(true);
+  const handleTopologyMatrixSync = () => {
+    setIsSyncingTopology(true);
     setTimeout(() => {
-      setIsProcessingMatrix(false);
+      setIsSyncingTopology(false);
     }, 1200);
   };
 
@@ -123,7 +132,7 @@ export default function Home() {
       style={{
         minHeight: "100vh",
         width: "100%",
-        backgroundColor: "#010204",
+        backgroundColor: "#020305",
         color: "#ffffff",
         fontFamily:
           '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
@@ -136,21 +145,19 @@ export default function Home() {
         letterSpacing: "0.01em",
       }}
     >
-      {/* ====================================================================
-          CINEMATIC GLOBAL BACKGROUND MATRIX
-          ==================================================================== */}
+      {/* 1. CINEMATIC GRADIENT MAPPING BACKGROUND */}
       <div
         style={{
           position: "fixed",
           inset: 0,
           background:
-            "radial-gradient(circle at 85% 25%, #050b18 0%, #010204 75%)",
+            "radial-gradient(circle at 85% 25%, #050c1c 0%, #020305 80%)",
           zIndex: 1,
           pointerEvents: "none",
         }}
       />
 
-      {/* FIXED COORDINATE GEOMETRIC ALIGNMENT LINES */}
+      {/* SOLID COORDINATE GRID LINES */}
       <div
         style={{
           position: "absolute",
@@ -166,7 +173,7 @@ export default function Home() {
       <div
         style={{
           position: "absolute",
-          left: "280px",
+          left: "320px",
           top: 0,
           width: "1px",
           height: "100%",
@@ -176,9 +183,7 @@ export default function Home() {
         }}
       />
 
-      {/* ====================================================================
-          INSTITUTIONAL MASTHEAD HEADER
-          ==================================================================== */}
+      {/* 2. GRAND INSTITUTIONAL NAVIGATION MASTHEAD */}
       <header
         style={{
           position: "fixed",
@@ -186,7 +191,7 @@ export default function Home() {
           left: 0,
           width: "100%",
           zIndex: 100,
-          backgroundColor: "rgba(1, 2, 4, 0.95)",
+          backgroundColor: "rgba(2, 3, 5, 0.96)",
           backdropFilter: "blur(24px)",
           WebkitBackdropFilter: "blur(24px)",
           borderBottom: "1px solid rgba(255, 255, 255, 0.03)",
@@ -226,7 +231,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div style={{ display: "flex", gap: "48px", alignItems: "center" }}>
+        <div style={{ display: "flex", gap: "60px", alignItems: "center" }}>
           <div
             style={{
               display: "flex",
@@ -241,7 +246,7 @@ export default function Home() {
                 color: "#ffffff",
               }}
             >
-              ${simulatedAUM.toFixed(2)}M
+              ${aggregateMetricsAUM.toFixed(2)}M
             </span>
             <span
               style={{
@@ -269,7 +274,7 @@ export default function Home() {
                 color: "#10b981",
               }}
             >
-              {systemUptime.toFixed(4)}%
+              {systemUptimeContinuum.toFixed(4)}%
             </span>
             <span
               style={{
@@ -286,9 +291,7 @@ export default function Home() {
         </div>
       </header>
 
-      {/* ====================================================================
-          CONTROL RUNTIME CONTAINER LAYER
-          ==================================================================== */}
+      {/* 3. CONTROL RUNTIME CONTAINER FRAMEWORK */}
       <div
         style={{
           display: "flex",
@@ -297,11 +300,11 @@ export default function Home() {
           boxSizing: "border-box",
         }}
       >
-        {/* SIDEBAR NAVIGATION CONTROL UNIT */}
+        {/* EXECUTIVE CONTROL PANEL SIDEBAR */}
         <nav
           style={{
-            width: "280px",
-            backgroundColor: "rgba(1, 2, 4, 0.5)",
+            width: "320px",
+            backgroundColor: "rgba(2, 3, 5, 0.6)",
             borderRight: "1px solid rgba(255, 255, 255, 0.03)",
             padding: "48px 30px",
             boxSizing: "border-box",
@@ -314,42 +317,44 @@ export default function Home() {
             justifyContent: "space-between",
           }}
         >
-          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
             <div
               style={{
                 fontFamily: "monospace",
                 fontSize: "9px",
                 color: "#475569",
-                tracking: "2px",
+                letterSpacing: "2px",
                 textTransform: "uppercase",
                 marginBottom: "16px",
               }}
             >
-              // SYSTEM CHANNELS
+              // PLATFORM CONTROL NODES
             </div>
             {[
-              { id: "overview", title: "01 // Executive Summary" },
-              { id: "topologies", title: "02 // Allocation Topologies" },
-              { id: "attenuation", title: "03 // Risk Attenuation Matrix" },
-              { id: "disclosures", title: "04 // Regulatory Disclosures" },
-            ].map((item) => (
+              { id: "overview", label: "01 // Executive Summary" },
+              { id: "topologies", label: "02 // Allocation Topologies" },
+              { id: "attenuation", label: "03 // Risk Attenuation Matrix" },
+              { id: "governance", label: "04 // Structural Governance" },
+              { id: "compliance", label: "05 // Compliance Disclosures" },
+              { id: "ledger", label: "06 // System Integrity Audit" },
+            ].map((panel) => (
               <button
-                key={item.id}
-                onClick={() => setCurrentPanel(item.id as ActivePanel)}
+                key={panel.id}
+                onClick={() => setCurrentPanel(panel.id as ActivePanel)}
                 style={{
                   width: "100%",
                   background:
-                    currentPanel === item.id
+                    currentPanel === panel.id
                       ? "rgba(214, 175, 55, 0.04)"
                       : "transparent",
                   border:
-                    currentPanel === item.id
+                    currentPanel === panel.id
                       ? "1px solid rgba(214, 175, 87, 0.15)"
                       : "1px solid transparent",
-                  color: currentPanel === item.id ? "#ffffff" : "#64748b",
+                  color: currentPanel === panel.id ? "#ffffff" : "#64748b",
                   padding: "14px 18px",
                   fontSize: "11px",
-                  fontWeight: currentPanel === item.id ? 600 : 400,
+                  fontWeight: currentPanel === panel.id ? 600 : 400,
                   textAlign: "left",
                   cursor: "pointer",
                   transition: "all 0.2s ease",
@@ -357,12 +362,11 @@ export default function Home() {
                   boxSizing: "border-box",
                 }}
               >
-                {item.title}
+                {panel.label}
               </button>
             ))}
           </div>
 
-          {/* Operational Location Anchor Footer */}
           <div
             style={{
               borderTop: "1px solid rgba(255,255,255,0.03)",
@@ -379,7 +383,7 @@ export default function Home() {
                 marginBottom: "4px",
               }}
             >
-              London Core Seat
+              London Corporate Core
             </span>
             <span
               style={{
@@ -390,18 +394,18 @@ export default function Home() {
                 fontWeight: 300,
               }}
             >
-              128 City Road, EC1V 2NX
+              128 City Road, London
               <br />
-              United Kingdom
+              EC1V 2NX, United Kingdom
             </span>
           </div>
         </nav>
 
-        {/* MAIN STRUCTURAL VIEWPORT VIEW PANEL */}
+        {/* WORKSPACE CENTRAL VIEWPORT VIEW PANEL */}
         <main
           style={{
             flex: 1,
-            padding: "60px 80px 140px 340px",
+            padding: "60px 80px 140px 380px",
             boxSizing: "border-box",
             position: "relative",
             zIndex: 10,
@@ -409,14 +413,14 @@ export default function Home() {
         >
           {/* PANEL 1: EXECUTIVE OVERVIEW */}
           {currentPanel === "overview" && (
-            <div style={{ animation: "fadeIn 0.4s ease" }}>
+            <div style={{ transition: "all 0.4s ease" }}>
               <div
                 style={{
                   maxWidth: "1400px",
                   margin: "0 auto",
                   display: "flex",
                   flexWrap: "wrap",
-                  items: "center",
+                  alignItems: "center",
                   gap: "80px",
                   justifyContent: "space-between",
                 }}
@@ -432,7 +436,7 @@ export default function Home() {
                       marginBottom: "24px",
                     }}
                   >
-                    // PRIVATE ASSET MANAGEMENT SYNDICATION
+                    // PRIVATE ASSET INSULATION MATRIX
                   </div>
                   <h2
                     style={{
@@ -445,9 +449,9 @@ export default function Home() {
                       textTransform: "uppercase",
                     }}
                   >
-                    Systemic Institutional <br />
+                    Systemic Capital <br />
                     <span style={{ fontWeight: 600, color: "#f3f4f6" }}>
-                      Neutralization
+                      Preservation
                     </span>
                   </h2>
                   <p
@@ -459,12 +463,12 @@ export default function Home() {
                       fontWeight: 300,
                     }}
                   >
-                    Crestmont Capital operates as a private closed-ended capital
-                    management collective. The framework organizes macro-level
-                    systemic distribution models designed from the ground up to
-                    isolate sovereign asset clusters, mitigate correlation
-                    errors, and coordinate capital provision across global
-                    primary wholesale pipelines with mathematical finality.
+                    Crestmont Capital operates as a closed-ended private capital
+                    management structure. The architecture coordinates deep,
+                    multi-asset allocation parameters designed to systematically
+                    safeguard sovereign asset bases, filter out micro-structural
+                    tracking errors, and execute liquidity distribution
+                    protocols across global networks with absolute finality.
                   </p>
 
                   <div
@@ -484,7 +488,7 @@ export default function Home() {
                         color: "#ffffff",
                       }}
                     >
-                      Pillars of Capital Defense
+                      Operational Mandate Parameters
                     </h4>
                     <p
                       style={{
@@ -495,18 +499,19 @@ export default function Home() {
                         margin: 0,
                       }}
                     >
-                      Every portfolio coordinate established by Crestmont
-                      Capital functions under non-discretionary execution
-                      algorithms. By integrating direct network tunnels akin to
-                      matching infrastructure structures within Citadel
-                      Securities systems, the platform enforces systematic order
-                      routing directly across liquidity pools, bypassing retail
-                      intermediation and secondary market distortions.
+                      Every portfolio vector mapped inside this framework
+                      operates strictly under non-discretionary execution
+                      parameters. By anchoring direct data tunnels straight into
+                      high-volume electronic routing configurations—similar to
+                      structural networks maintained within Citadel Securities
+                      frameworks—the platform handles high-capacity allocations
+                      cleanly while mitigating external counterparty noise and
+                      market-maker fractional slippage.
                     </p>
                   </div>
                 </div>
 
-                {/* VISUAL ARCHITECTURAL BUILDING ENGINE PROJECTION */}
+                {/* GRAND WIREFRAME ARCHITECTURAL MONOLITH */}
                 <div
                   style={{
                     flex: "1 1 450px",
@@ -552,7 +557,7 @@ export default function Home() {
                         }}
                       />
 
-                      {/* Architrave Element Beam */}
+                      {/* Beam Plate Architrave */}
                       <div
                         style={{
                           width: "100%",
@@ -562,7 +567,7 @@ export default function Home() {
                         }}
                       />
 
-                      {/* Linear Columns Row */}
+                      {/* Linear Column Matrices */}
                       <div
                         style={{
                           display: "flex",
@@ -571,9 +576,9 @@ export default function Home() {
                           height: "130px",
                         }}
                       >
-                        {[1, 2, 3, 4, 5].map((columnId) => (
+                        {[1, 2, 3, 4, 5].map((col) => (
                           <div
-                            key={columnId}
+                            key={col}
                             style={{
                               width: "10px",
                               height: "100%",
@@ -599,7 +604,7 @@ export default function Home() {
                         ))}
                       </div>
 
-                      {/* Stylobate Steps Foundation Platform */}
+                      {/* Stylobate Base Steps Foundation */}
                       <div
                         style={{
                           display: "flex",
@@ -628,17 +633,17 @@ export default function Home() {
                       </div>
                     </div>
 
-                    {/* Orbiting Axis Vectors Ring Array */}
-                    {[0, 1, 2, 3].map((ringIndex) => (
+                    {/* Surrounding Dynamic Horizon Boundary Tracks */}
+                    {[0, 1, 2, 3].map((track) => (
                       <div
-                        key={ringIndex}
+                        key={track}
                         style={{
                           position: "absolute",
-                          width: `${300 + ringIndex * 36}px`,
-                          height: `${300 + ringIndex * 36}px`,
+                          width: `${300 + track * 36}px`,
+                          height: `${300 + track * 36}px`,
                           borderRadius: "50%",
                           border:
-                            activeSignal === ringIndex
+                            signalSequence === track
                               ? "1px solid rgba(214, 175, 87, 0.12)"
                               : "1px solid transparent",
                           transform: "rotateX(72deg) rotateY(12deg)",
@@ -655,7 +660,7 @@ export default function Home() {
 
           {/* PANEL 2: ALLOCATION TOPOLOGIES */}
           {currentPanel === "topologies" && (
-            <div style={{ animation: "fadeIn 0.4s ease" }}>
+            <div style={{ transition: "all 0.4s ease" }}>
               <div style={{ marginBottom: "40px" }}>
                 <div
                   style={{
@@ -667,7 +672,7 @@ export default function Home() {
                     marginBottom: "12px",
                   }}
                 >
-                  // MATRIX_CORE // ALLOCATION_TOPOLOGIES
+                  // ALLOCATION_CORE // NETWORK_TOPOLOGY
                 </div>
                 <h3
                   style={{
@@ -677,11 +682,11 @@ export default function Home() {
                     margin: 0,
                   }}
                 >
-                  Sovereign Vector Configurations
+                  Sovereign Balance Matrices
                 </h3>
               </div>
 
-              {/* INTERACTIVE ALLOCATION CALCULATOR CONTROLS */}
+              {/* LIVE SIMULATOR MANIFOLD CONTROLS */}
               <div
                 style={{
                   backgroundColor: "rgba(5, 10, 24, 0.3)",
@@ -701,7 +706,7 @@ export default function Home() {
                     marginBottom: "24px",
                   }}
                 >
-                  Macro Parameter Integration Board
+                  Macro Parameter Calibration Board
                 </h4>
                 <div
                   style={{
@@ -722,9 +727,9 @@ export default function Home() {
                         marginBottom: "12px",
                       }}
                     >
-                      <span>System Target Concentration</span>
+                      <span>System Allocation Focus</span>
                       <span style={{ color: "#d4af37" }}>
-                        {allocationWeight.toFixed(1)}%
+                        {allocationParameter.toFixed(1)}%
                       </span>
                     </label>
                     <input
@@ -732,9 +737,9 @@ export default function Home() {
                       min="50"
                       max="95"
                       step="0.5"
-                      value={allocationWeight}
+                      value={allocationParameter}
                       onChange={(e) =>
-                        setAllocationWeight(parseFloat(e.target.value))
+                        setAllocationParameter(parseFloat(e.target.value))
                       }
                       style={{
                         width: "100%",
@@ -757,9 +762,9 @@ export default function Home() {
                         marginBottom: "12px",
                       }}
                     >
-                      <span>Integrated Boundary Threshold ($\sigma$)</span>
+                      <span>Integrated Boundary Coefficient ($\sigma$)</span>
                       <span style={{ color: "#d4af37" }}>
-                        {varianceBound.toFixed(2)}
+                        {varianceBoundary.toFixed(2)}
                       </span>
                     </label>
                     <input
@@ -767,9 +772,9 @@ export default function Home() {
                       min="0.02"
                       max="0.45"
                       step="0.01"
-                      value={varianceBound}
+                      value={varianceBoundary}
                       onChange={(e) =>
-                        setVarianceBound(parseFloat(e.target.value))
+                        setVarianceBoundary(parseFloat(e.target.value))
                       }
                       style={{
                         width: "100%",
@@ -784,8 +789,8 @@ export default function Home() {
                 </div>
 
                 <button
-                  onClick={triggerMatrixRecalculation}
-                  disabled={isProcessingMatrix}
+                  onClick={handleTopologyMatrixSync}
+                  disabled={isSyncingTopology}
                   style={{
                     backgroundColor: "rgba(214, 175, 55, 0.05)",
                     border: "1px solid #d4af37",
@@ -795,17 +800,17 @@ export default function Home() {
                     fontWeight: 600,
                     textTransform: "uppercase",
                     letterSpacing: "2px",
-                    cursor: isProcessingMatrix ? "not-allowed" : "pointer",
+                    cursor: isSyncingTopology ? "not-allowed" : "pointer",
                     transition: "all 0.3s ease",
                   }}
                 >
-                  {isProcessingMatrix
-                    ? "Computing Optimization Paths..."
-                    : "Execute Parameter Synchronization"}
+                  {isSyncingTopology
+                    ? "Rebalancing Topology Fields..."
+                    : "Execute Model Synchronization"}
                 </button>
               </div>
 
-              {/* NODE LIQUIDITY BALANCING DATA TABLE */}
+              {/* TOPOLOGY BALANCING GRID SYSTEM */}
               <div style={{ border: "1px solid rgba(255, 255, 255, 0.03)" }}>
                 <div
                   style={{
@@ -820,21 +825,21 @@ export default function Home() {
                     letterSpacing: "1px",
                   }}
                 >
-                  <div>SOVEREIGN DEPLOYMENT HORIZON</div>
+                  <div>SOVEREIGN NETWORK VECTOR</div>
                   <div>ALLOCATION WEIGHT</div>
                   <div>LIQUIDITY INDEX</div>
-                  <div>NODE STATE</div>
+                  <div>STRUCTURAL DRIFT CAP</div>
                 </div>
-                {INITIAL_NODES.map((node, nodeIndex) => {
-                  const dynamicWeight =
-                    nodeIndex === 0
-                      ? allocationWeight / 100
-                      : (1 - allocationWeight / 100) *
-                        (node.alphaWeight / (1 - INITIAL_NODES[0].alphaWeight));
+                {CAPITAL_CHANNELS.map((node, i) => {
+                  const calculatedWeight =
+                    i === 0
+                      ? allocationParameter / 100
+                      : (1 - allocationParameter / 100) *
+                        (node.baseRatio / (1 - CAPITAL_CHANNELS[0].baseRatio));
 
                   return (
                     <div
-                      key={nodeIndex}
+                      key={i}
                       style={{
                         display: "grid",
                         gridTemplateColumns: "2fr 1fr 1fr 1fr",
@@ -846,17 +851,17 @@ export default function Home() {
                       }}
                     >
                       <div style={{ color: "#ffffff", fontWeight: 500 }}>
-                        {node.region}
+                        {node.zone}
                       </div>
                       <div
                         style={{ fontFamily: "monospace", color: "#d4af37" }}
                       >
-                        {(dynamicWeight * 100).toFixed(2)}%
+                        {(calculatedWeight * 100).toFixed(2)}%
                       </div>
                       <div
                         style={{ fontFamily: "monospace", color: "#94a3b8" }}
                       >
-                        {(node.liquidityIndex - varianceBound * 0.05).toFixed(
+                        {(node.densityMetric - varianceBoundary * 0.04).toFixed(
                           4
                         )}
                       </div>
@@ -867,7 +872,7 @@ export default function Home() {
                           color: "#10b981",
                         }}
                       >
-                        {node.state}
+                        {node.structuralCap}
                       </div>
                     </div>
                   );
@@ -878,7 +883,7 @@ export default function Home() {
 
           {/* PANEL 3: RISK ATTENUATION MATRIX */}
           {currentPanel === "attenuation" && (
-            <div style={{ animation: "fadeIn 0.4s ease" }}>
+            <div style={{ transition: "all 0.4s ease" }}>
               <div style={{ marginBottom: "40px" }}>
                 <div
                   style={{
@@ -890,7 +895,7 @@ export default function Home() {
                     marginBottom: "12px",
                   }}
                 >
-                  // RISK_ATTENUATION // STRUCTURAL_CONTROLS
+                  // RISK_BOUNDS // SOVEREIGN_INSULATION
                 </div>
                 <h3
                   style={{
@@ -900,7 +905,7 @@ export default function Home() {
                     margin: 0,
                   }}
                 >
-                  Stochastic Insulation Matrices
+                  Stochastic Mitigation Frameworks
                 </h3>
               </div>
 
@@ -928,7 +933,7 @@ export default function Home() {
                       marginBottom: "20px",
                     }}
                   >
-                    // MATRIX_COEFFICIENT_ALPHA
+                    // MITIGATION_COEFFICIENT_ALPHA
                   </div>
                   <h4
                     style={{
@@ -939,7 +944,7 @@ export default function Home() {
                       letterSpacing: "-0.01em",
                     }}
                   >
-                    Non-Linear Volatility Attenuation
+                    Non-Linear Noise Filtering
                   </h4>
                   <p
                     style={{
@@ -950,11 +955,10 @@ export default function Home() {
                       margin: 0,
                     }}
                   >
-                    By implementing high-dimensional structural filtering
-                    distributions over simple standard deviation tracking
-                    intervals, our asset baseline strips tracking noise
-                    completely out of active calculations, identifying
-                    underlying absolute correlation matrices safely.
+                    By processing exposure indices through complex structural
+                    distributions rather than standard deviation blocks, the
+                    core layout cleans macro-structural signals while stripping
+                    random trend mutations entirely.
                   </p>
                 </div>
 
@@ -974,7 +978,7 @@ export default function Home() {
                       marginBottom: "20px",
                     }}
                   >
-                    // MATRIX_COEFFICIENT_BETA
+                    // MITIGATION_COEFFICIENT_BETA
                   </div>
                   <h4
                     style={{
@@ -985,7 +989,7 @@ export default function Home() {
                       letterSpacing: "-0.01em",
                     }}
                   >
-                    Asymmetric Downside Insulation
+                    Asymmetric Downside Variance Protection
                   </h4>
                   <p
                     style={{
@@ -996,16 +1000,15 @@ export default function Home() {
                       margin: 0,
                     }}
                   >
-                    Allocation coordinates drop complex global dependencies down
-                    to binary, non-discretionary targets. This protective
-                    structural setup removes the human operational anomalies and
-                    behavioral heuristics common during significant systemic
-                    volatility adjustments.
+                    Systemic configurations force capital distribution balances
+                    into clear, rule-based pathways. This strict architectural
+                    protection neutralizes psychological heuristics and
+                    operational errors during volatile allocation changes.
                   </p>
                 </div>
               </div>
 
-              {/* RISK PARAMETER PANEL MODULATOR CONTROLS */}
+              {/* INTEGRATED RISK MODEL REGULATION BOARD */}
               <div
                 style={{
                   backgroundColor: "#020409",
@@ -1023,7 +1026,7 @@ export default function Home() {
                     marginBottom: "24px",
                   }}
                 >
-                  Value-at-Risk ($VaR$) Target Modulation
+                  Value-at-Risk ($VaR$) Metric Attenuation Bounds
                 </h4>
                 <div
                   style={{
@@ -1035,34 +1038,33 @@ export default function Home() {
                 >
                   {[
                     {
-                      label: "95% Confidence Limit ($Z_c = 1.65$)",
-                      value: 1.65,
+                      title: "95% Confidence Index ($Z_c = 1.65$)",
+                      zValue: 1.65,
                     },
                     {
-                      label: "99% Confidence Limit ($Z_c = 2.33$)",
-                      value: 2.33,
+                      title: "99% Confidence Index ($Z_c = 2.33$)",
+                      zValue: 2.33,
                     },
                     {
-                      label: "99.9% Sovereign Protection ($Z_c = 3.09$)",
-                      value: 3.09,
+                      title:
+                        "99.9% Sovereign Protection Boundary ($Z_c = 3.09$)",
+                      zValue: 3.09,
                     },
                   ].map((btn) => (
                     <button
-                      key={btn.value}
-                      onClick={() => setTailRiskTolerance(btn.value)}
+                      key={btn.zValue}
+                      onClick={() => setTailRiskZScore(btn.zValue)}
                       style={{
                         backgroundColor:
-                          tailRiskTolerance === btn.value
+                          tailRiskZScore === btn.zValue
                             ? "rgba(214,175,55,0.08)"
                             : "transparent",
                         border:
-                          tailRiskTolerance === btn.value
+                          tailRiskZScore === btn.zValue
                             ? "1px solid #d4af37"
                             : "1px solid rgba(255,255,255,0.08)",
                         color:
-                          tailRiskTolerance === btn.value
-                            ? "#ffffff"
-                            : "#64748b",
+                          tailRiskZScore === btn.zValue ? "#ffffff" : "#64748b",
                         padding: "12px 20px",
                         fontSize: "11px",
                         fontFamily: "monospace",
@@ -1070,7 +1072,7 @@ export default function Home() {
                         transition: "all 0.2s ease",
                       }}
                     >
-                      {btn.label}
+                      {btn.title}
                     </button>
                   ))}
                 </div>
@@ -1083,22 +1085,21 @@ export default function Home() {
                     fontWeight: 300,
                   }}
                 >
-                  Current allocation models are optimizing variance distribution
-                  bounds targeting a Critical $Z$-score multiplier of{" "}
+                  Active allocation pathways utilize variance tracking limits
+                  anchored to a Critical $Z$-score multiplier of{" "}
                   <span style={{ color: "#d4af37", fontFamily: "monospace" }}>
-                    {tailRiskTolerance}
+                    {tailRiskZScore}
                   </span>
-                  . This mathematical baseline enforces systemic capital
-                  protection parameters natively across all sovereign clear
-                  paths.
+                  . This parameter enforces systemic risk mitigation metrics
+                  automatically across all active paths.
                 </p>
               </div>
             </div>
           )}
 
-          {/* PANEL 4: REGULATORY DISCLOSURES */}
-          {currentPanel === "disclosures" && (
-            <div style={{ animation: "fadeIn 0.4s ease" }}>
+          {/* PANEL 4: STRUCTURAL GOVERNANCE */}
+          {currentPanel === "governance" && (
+            <div style={{ transition: "all 0.4s ease" }}>
               <div style={{ marginBottom: "40px" }}>
                 <div
                   style={{
@@ -1110,7 +1111,7 @@ export default function Home() {
                     marginBottom: "12px",
                   }}
                 >
-                  // LEDGER_DISCLOSURE // LEGAL_STATEMENT
+                  // GOVERNANCE // CAPITAL_PROTECTION
                 </div>
                 <h3
                   style={{
@@ -1120,7 +1121,64 @@ export default function Home() {
                     margin: 0,
                   }}
                 >
-                  Institutional Compliance Ledger
+                  Systemic Risk Policy & Institutional Control
+                </h3>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "24px",
+                  color: "#94a3b8",
+                  fontSize: "14px",
+                  lineHeight: "1.8",
+                  fontWeight: 300,
+                }}
+              >
+                <p>
+                  Institutional oversight at Crestmont Capital is governed
+                  through automated structural boundaries. The system utilizes
+                  deterministic logic gates that enforce allocation rules across
+                  every sovereign asset node, rendering the model entirely
+                  isolated from emotional drift, portfolio execution fatigue, or
+                  discretionary intervention anomalies.
+                </p>
+                <p>
+                  Balance controls use a multi-tiered validation stack. Under
+                  this layout, any shifts in market covariance models trigger
+                  automated defensive constraints, isolating balance sheet
+                  assets into uncorrelated cash buffers until system conditions
+                  return to long-term parametric norms.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* PANEL 5: REGULATORY DISCLOSURES */}
+          {currentPanel === "compliance" && (
+            <div style={{ transition: "all 0.4s ease" }}>
+              <div style={{ marginBottom: "40px" }}>
+                <div
+                  style={{
+                    fontFamily: "monospace",
+                    fontSize: "10px",
+                    color: "#d4af37",
+                    textTransform: "uppercase",
+                    letterSpacing: "4px",
+                    marginBottom: "12px",
+                  }}
+                >
+                  // LEGAL_LEDGER // COMPLIANCE_MANDATE
+                </div>
+                <h3
+                  style={{
+                    fontSize: "32px",
+                    fontWeight: 300,
+                    color: "#ffffff",
+                    margin: 0,
+                  }}
+                >
+                  Jurisdictional Ledger & Structural Parameters
                 </h3>
               </div>
 
@@ -1136,40 +1194,95 @@ export default function Home() {
                 }}
               >
                 <p>
-                  Crestmont Capital Ltd is a private limited entity incorporated
-                  under the jurisdiction of England and Wales (Entity
-                  Registration Certificate No. 17037425). The platform
-                  operations, systematic allocations, and algorithmic models
-                  presented herein are deployed exclusively for proprietary
-                  treasury configurations and deep wholesale capital balance
-                  preservation parameters.
+                  Crestmont Capital Ltd operates as a corporate limited
+                  infrastructure entity established within the jurisdiction of
+                  England and Wales (Entity Registration Certificate No.
+                  17037425). The platform operations, systematic structures, and
+                  risk distribution frameworks detailed in this interface are
+                  engineered exclusively for the optimization of proprietary
+                  treasury balances and institutional capital safety parameters.
                 </p>
                 <p>
-                  This infrastructure interface does not serve as an open retail
-                  brokerage or common financial advisory gateway. Access
-                  parameters to clearing paths and internal risk models are
-                  managed under strict institutional containment mandates. All
-                  data sets, simulated tracking coefficients, and runtime
-                  configurations are strictly proprietary intellectual assets of
-                  Crestmont Capital Ltd.
+                  This dashboard environment functions entirely as a private
+                  proprietary system and does not configure public advisory
+                  conduits or retail financial broker interfaces. Access
+                  permissions to clearing structures and validation metrics are
+                  restricted under strict internal corporate guidelines. All
+                  layout configurations and data visualizations remain the
+                  exclusive intellectual property of Crestmont Capital Ltd.
                 </p>
+              </div>
+            </div>
+          )}
+
+          {/* PANEL 6: SYSTEM INTEGRITY AUDIT */}
+          {currentPanel === "ledger" && (
+            <div style={{ transition: "all 0.4s ease" }}>
+              <div style={{ marginBottom: "40px" }}>
+                <div
+                  style={{
+                    fontFamily: "monospace",
+                    fontSize: "10px",
+                    color: "#d4af37",
+                    textTransform: "uppercase",
+                    letterSpacing: "4px",
+                    marginBottom: "12px",
+                  }}
+                >
+                  // AUDIT_TRACE // COMPILER_VALIDATION
+                </div>
+                <h3
+                  style={{
+                    fontSize: "32px",
+                    fontWeight: 300,
+                    color: "#ffffff",
+                    margin: 0,
+                  }}
+                >
+                  Bare-Metal Network Diagnostics
+                </h3>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "24px",
+                  color: "#94a3b8",
+                  fontSize: "14px",
+                  lineHeight: "1.8",
+                  fontWeight: 300,
+                }}
+              >
                 <p>
                   Sovereign network allocations and transaction routing
                   methodologies align continuously with internal validation
                   auditing logs. System benchmarks are generated natively across
                   bare-metal server matrices to guarantee mathematical
                   structural stability during high-intensity global cross-border
-                  allocation cycles.
+                  allocation cycles, preventing processing degradation across
+                  regional nodes.
                 </p>
+                <div
+                  style={{
+                    border: "1px solid rgba(255,255,255,0.03)",
+                    padding: "24px",
+                    backgroundColor: "#020409",
+                    fontFamily: "monospace",
+                    fontSize: "11px",
+                    color: "#4b5563",
+                  }}
+                >
+                  <div>&gt; NETWORK_INTEGRITY_CHECK: PASS</div>
+                  <div>&gt; SUBSYSTEM_ISOLATION_INDEX: 1.0000 (ZERO_LEAK)</div>
+                  <div>&gt; REGIONAL_NODE_LATENCY_MAX: 0.08ms</div>
+                </div>
               </div>
             </div>
           )}
         </main>
       </div>
 
-      {/* ====================================================================
-          FIXED REAL-TIME COMPILER TELEMETRY INTERFACE
-          ==================================================================== */}
+      {/* FIXED METRIC RUNTIME LOG TERMINAL BLOCK */}
       <div
         style={{
           position: "fixed",
@@ -1177,7 +1290,7 @@ export default function Home() {
           right: "40px",
           width: "440px",
           backgroundColor: "rgba(2, 3, 5, 0.95)",
-          border: "1px solid rgba(255, 255, 255, 0.04)",
+          border: "1px solid rgba(255, 25, 55, 0.04)",
           padding: "20px",
           fontFamily: "monospace",
           fontSize: "10px",
@@ -1200,7 +1313,7 @@ export default function Home() {
           }}
         >
           <span>// REAL-TIME SYSTEMIC TELEMETRY ENGINE</span>
-          <span style={{ color: "#d4af37" }}>LIVE_FEED</span>
+          <span style={{ color: "#d4af37" }}>ACTIVE_FEED</span>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
           {telemetryLogs.map((log) => (
@@ -1213,7 +1326,7 @@ export default function Home() {
                 overflow: "hidden",
               }}
             >
-              <span style={{ color: "#475569" }}>[{log.timestamp}]</span>
+              <span style={{ color: "#475569" }}>[{log.timeMark}]</span>
               <span
                 style={{
                   color: "#94a3b8",
@@ -1223,31 +1336,29 @@ export default function Home() {
                   overflow: "hidden",
                 }}
               >
-                {log.vector}
+                {log.subsystem}
               </span>
               <span
                 style={{
-                  color: log.systemState.includes("NOMINAL")
+                  color: log.metricLabel.includes("NOMINAL")
                     ? "#10b981"
                     : "#d4af37",
                   paddingLeft: "12px",
                 }}
               >
-                {log.systemState}
+                {log.metricLabel}
               </span>
             </div>
           ))}
         </div>
       </div>
 
-      {/* ====================================================================
-          GLOBAL INSTITUTIONAL REGULATORY FOOTER
-          ==================================================================== */}
+      {/* 4. SOLID INSTITUTIONAL CLOSURE FOOTER */}
       <footer
         style={{
           borderTop: "1px solid rgba(255, 255, 255, 0.04)",
           backgroundColor: "#010203",
-          padding: "100px 60px 40px 60px",
+          padding: "140px 80px 60px 80px",
           boxSizing: "border-box",
           position: "relative",
           zIndex: 30,
@@ -1258,9 +1369,9 @@ export default function Home() {
             maxWidth: "1600px",
             margin: "0 auto",
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-            gap: "48px",
-            marginBottom: "80px",
+            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+            gap: "64px",
+            marginBottom: "120px",
           }}
         >
           <div>
@@ -1271,7 +1382,7 @@ export default function Home() {
                 textTransform: "uppercase",
                 letterSpacing: "5px",
                 color: "#ffffff",
-                marginBottom: "24px",
+                marginBottom: "28px",
               }}
             >
               Crestmont{" "}
@@ -1290,7 +1401,7 @@ export default function Home() {
               <br />
               Continuous Stochastic Execution Matrix.
               <br />
-              Hardware Independent Runtime Sovereignty.
+              Hardware Independent Architecture Sovereignty.
             </p>
           </div>
           <div>
@@ -1300,11 +1411,11 @@ export default function Home() {
                 fontWeight: 600,
                 textTransform: "uppercase",
                 letterSpacing: "2px",
-                marginBottom: "24px",
+                marginBottom: "28px",
                 fontSize: "11px",
               }}
             >
-              System Directives
+              Core Mandates
             </h5>
             <div
               style={{
@@ -1316,9 +1427,9 @@ export default function Home() {
                 fontWeight: 300,
               }}
             >
-              <div>Risk Attenuation Coefficients</div>
-              <div>Memory Structure Consistency</div>
-              <div>Deterministic State Verification</div>
+              <div>Risk Attenuation Limits</div>
+              <div>Balance Structure Consistency</div>
+              <div>Sovereign Configuration Validation</div>
             </div>
           </div>
           <div>
@@ -1328,11 +1439,11 @@ export default function Home() {
                 fontWeight: 600,
                 textTransform: "uppercase",
                 letterSpacing: "2px",
-                marginBottom: "24px",
+                marginBottom: "28px",
                 fontSize: "11px",
               }}
             >
-              Global Network Infrastructure
+              Global Infrastructure Network
             </h5>
             <div
               style={{
@@ -1357,11 +1468,11 @@ export default function Home() {
                 fontWeight: 600,
                 textTransform: "uppercase",
                 letterSpacing: "2px",
-                marginBottom: "24px",
+                marginBottom: "28px",
                 fontSize: "11px",
               }}
             >
-              Registered Office
+              Registered Seat
             </h5>
             <p
               style={{
@@ -1384,7 +1495,7 @@ export default function Home() {
                   fontFamily: "monospace",
                   fontSize: "11px",
                   display: "block",
-                  marginTop: "12px",
+                  marginTop: "16px",
                   letterSpacing: "0.5px",
                 }}
               >
@@ -1398,7 +1509,7 @@ export default function Home() {
           style={{
             maxWidth: "1600px",
             margin: "0 auto",
-            paddingTop: "40px",
+            paddingTop: "44px",
             borderTop: "1px solid rgba(255, 255, 255, 0.03)",
             display: "flex",
             flexWrap: "wrap",
@@ -1412,7 +1523,7 @@ export default function Home() {
           <div>
             © 2026 Crestmont Capital Ltd. Incorporated in England & Wales.
             Company Registration No. 17037425. All quantitative systemic
-            protocols enforced.
+            protocols and liquidity protection parameters enforced.
           </div>
           <div style={{ display: "flex", gap: "32px" }}>
             <div>System Integrity Mandate</div>
@@ -1421,20 +1532,6 @@ export default function Home() {
           </div>
         </div>
       </footer>
-
-      {/* CORE CSS FADE ANIMATION BLOCK */}
-      <style jsx global>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(6px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
     </div>
   );
 }
